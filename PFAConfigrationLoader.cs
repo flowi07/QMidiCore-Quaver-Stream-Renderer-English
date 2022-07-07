@@ -63,7 +63,7 @@ namespace QQS_UI
                     A = 0xFF
                 });
             }
-            Console.WriteLine("PFA 配置颜色解析完成. 一共 {0} 种颜色.", retColors.Count);
+            Console.WriteLine("PFA configuration color parsing is complete. There are {0} colors in total.", retColors.Count);
             return retColors.ToArray();
         }
     }

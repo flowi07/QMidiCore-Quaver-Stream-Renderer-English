@@ -110,7 +110,7 @@
         </Setter>
     </Style>
     <Style x:Key="SubTabItems" TargetType="TabItem">
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Template">
@@ -127,7 +127,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Panel" Property="Background" Value="#33FFFFFF" />
+                            <Setter TargetName="Panel" Property="Background" Value="#33000000" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="False">
                             <Setter TargetName="Panel" Property="Background" Value="Transparent" />

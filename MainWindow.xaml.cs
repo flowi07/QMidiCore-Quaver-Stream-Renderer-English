@@ -34,8 +34,8 @@ namespace QQS_UI
         private readonly Config config;
         private readonly CustomColor customColors;
         private int keyHeightPercentage = 15;
-        private const string DefaultVideoFilter = "视频 (*.mp4, *.avi, *.mov)|*.mp4;*.avi;*.mov",
-            TransparentVideoFilter = "视频 (*.mov)|*.mov";
+        private const string DefaultVideoFilter = "Video (*.mp4, *.avi, *.mov)|*.mp4;*.avi;*.mov",
+            TransparentVideoFilter = "Video (*.mov)|*.mov";
         public MainWindow()
         {
             InitializeComponent();
@@ -103,7 +103,7 @@ namespace QQS_UI
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                Filter = "Midi 文件 (*.mid)|*.mid",
+                Filter = "Midi File (*.mid)|*.mid",
                 InitialDirectory = config.CachedMIDIDirectory
             };
             if ((bool)dialog.ShowDialog())
@@ -124,13 +124,13 @@ namespace QQS_UI
             string fileName = midiPath.Text;
             if (!File.Exists(fileName) || !fileName.EndsWith(".mid"))
             {
-                _ = MessageBox.Show("不正确的 Midi 路径!", "无法加载 Midi 文件");
+                _ = MessageBox.Show("Incorrect Midi path!", "Unable to load Midi file");
                 return;
             }
-            trackCount.Content = "加载中...";
-            noteCount.Content = "加载中...";
-            midiLen.Content = "加载中...";
-            midiPPQ.Content = "加载中...";
+            trackCount.Content = "Loading...";
+            noteCount.Content = "Loading...";
+            midiLen.Content = "Loading...";
+            midiPPQ.Content = "Loading...";
             _ = Task.Run(() =>
             {
                 isLoading = true;
@@ -154,7 +154,7 @@ namespace QQS_UI
             file = null;
             GC.Collect(gen);
             Resources["midiLoaded"] = false;
-            Console.WriteLine("Midi 已经卸载.");
+            Console.WriteLine("Midi unloaded.");
             noteCount.Content = "-";
             trackCount.Content = "-";
             midiLen.Content = "--:--.---";
@@ -171,7 +171,7 @@ namespace QQS_UI
             SaveFileDialog dialog = new SaveFileDialog()
             {
                 Filter = options.TransparentBackground ? TransparentVideoFilter : DefaultVideoFilter,
-                Title = "选择保存输出视频的位置",
+                Title = "Select the location to save the output video",
                 InitialDirectory = config.CachedVideoDirectory
             };
             if ((bool)dialog.ShowDialog())
@@ -186,7 +186,7 @@ namespace QQS_UI
         {
             if (file == null)
             {
-                _ = MessageBox.Show("无法进行渲染: \nMidi 文件为空. 请检查是否加载了 Midi 文件.", "无 Midi 文件");
+                _ = MessageBox.Show("Unable to render: \nMidi file is empty. Please check if the Midi file is loaded.", "No Midi file");
                 return;
             }
             options.Input = midiPath.Text;
@@ -197,7 +197,7 @@ namespace QQS_UI
             renderer = new CommonRenderer(file, options);
             _ = Task.Run(() =>
             {
-                Console.WriteLine("准备渲染...");
+                Console.WriteLine("Preparing to render...");
                 renderer.Render();
                 int gen = GC.GetGeneration(renderer);
                 Dispatcher.Invoke(() =>
@@ -241,7 +241,7 @@ namespace QQS_UI
         {
             if (file == null)
             {
-                _ = MessageBox.Show("无法进行预览: \nMidi 文件为空. 请检查是否加载了 Midi 文件.", "无 Midi 文件");
+                _ = MessageBox.Show("Cannot preview: \nMidi file is empty. Please check if the Midi file is loaded.", "No Midi file");
                 return;
             }
             options.Input = midiPath.Text;
@@ -252,7 +252,7 @@ namespace QQS_UI
             renderer = new CommonRenderer(file, options);
             _ = Task.Run(() =>
             {
-                Console.WriteLine("准备预览...");
+                Console.WriteLine("Prepare to preview...");
                 renderer.Render();
                 int gen = GC.GetGeneration(renderer);
                 Dispatcher.Invoke(() =>
@@ -268,7 +268,7 @@ namespace QQS_UI
         {
             customColors.UseDefault();
             customColors.SetGlobal();
-            _ = MessageBox.Show("颜色重设完成.", "颜色重置完成");
+            _ = MessageBox.Show("Color reset is complete.", "Color reset complete");
         }
 
         private void loadColors_Click(object sender, RoutedEventArgs e)
@@ -276,34 +276,34 @@ namespace QQS_UI
             string filePath = colorPath.Text;
             if (!filePath.EndsWith(".json"))
             {
-                _ = MessageBox.Show("无法加载颜色文件.\n当前仅支持.json格式的颜色文件.", "无法加载颜色");
+                _ = MessageBox.Show("Unable to load color file. \n currently only supports color files in .json format.", "Unable to load colors");
                 return;
             }
             if (!File.Exists(filePath))
             {
-                _ = MessageBox.Show("无法加载颜色文件: 文件不存在.", "无法加载颜色");
+                _ = MessageBox.Show("Unable to load color file: file does not exist.", "Unable to load color");
                 return;
             }
             int errCode = customColors.Load(filePath);
             if (errCode == 1)
             {
-                _ = MessageBox.Show("加载颜色文件时发生了错误: 此文件格式不与支持的颜色文件兼容.", "无法加载颜色");
+                _ = MessageBox.Show("An error occurred while loading a color file: This file format is not compatible with the supported color files.", "Unable to load colors");
                 return;
             }
             errCode = customColors.SetGlobal();
             if (errCode != 0)
             {
-                _ = MessageBox.Show("设置颜色时发生了错误: 颜色为空.", "无法设置颜色");
+                _ = MessageBox.Show("An error occurred while setting the color: The color is empty.", "Unable to set color");
                 return;
             }
-            _ = MessageBox.Show("颜色加载成功. 一共加载了: " + customColors.Colors.Length + " 种颜色.", "颜色加载完成");
+            _ = MessageBox.Show("Colors loaded successfully. Total loaded: " + customColors.Colors.Length + " Colors.", "Color loading completed");
         }
 
         private void openColorFile_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                Filter = "JSON 文件 (*.json)|*.json",
+                Filter = "JSON file (*.json)|*.json",
                 InitialDirectory = config.CachedColorDirectory
             };
             if ((bool)dialog.ShowDialog())
@@ -330,7 +330,7 @@ namespace QQS_UI
             }
             catch (Exception ex)
             {
-                _ = MessageBox.Show($"加载 PFA 配置颜色时出现了错误: \n{ex.Message}\n栈追踪: \n{ex.StackTrace}", "无法加载 PFA 配置");
+                _ = MessageBox.Show($"An error occurred while loading PFA configuration colors: \n{ex.Message}\nStack tracing: \n{ex.StackTrace}", "Unable to load PFA configuration");
             }
         }
 
@@ -339,7 +339,7 @@ namespace QQS_UI
             string coltxt = bgColor.Text;
             if (coltxt.Length != 6)
             {
-                _ = MessageBox.Show("当前的颜色代码不符合规范.\n一个颜色代码应当由6位16进制表示的数字组成.", "无法设置颜色");
+                _ = MessageBox.Show("The current color code does not conform to the specification. \nA color code should consist of 6 digits expressed in hexadecimal.", "Unable to set color");
                 return;
             }
             try
@@ -359,7 +359,7 @@ namespace QQS_UI
             }
             catch
             {
-                _ = MessageBox.Show("错误: 无法解析颜色代码.\n请检查输入的颜色代码是否正确.", "无法设置颜色");
+                _ = MessageBox.Show("Error: Unable to parse color code. \nPlease check if the color code entered is correct.", "Unable to set color");
             }
         }
 
@@ -675,7 +675,7 @@ namespace QQS_UI
             string coltxt = barColor.Text;
             if (coltxt.Length != 6)
             {
-                _ = MessageBox.Show("当前的颜色代码不符合规范.\n一个颜色代码应当由6位16进制表示的数字组成.", "无法设置颜色");
+                _ = MessageBox.Show("The current color code does not conform to the specification. \nA color code should consist of 6 digits expressed in hexadecimal.", "Unable to set color");
                 return;
             }
             try
@@ -695,7 +695,7 @@ namespace QQS_UI
             }
             catch
             {
-                _ = MessageBox.Show("错误: 无法解析颜色代码.\n请检查输入的颜色代码是否正确.", "无法设置颜色");
+                _ = MessageBox.Show("Error: Unable to parse color code. \nPlease check if the color code entered is correct.", "Unable to set color");
             }
         }
     }

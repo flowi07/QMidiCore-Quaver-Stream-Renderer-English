@@ -30,12 +30,12 @@ namespace QQS_UI
                 }
                 catch
                 {
-                    Console.WriteLine("加载颜色配置时出现错误, 将使用默认颜色...");
+                    Console.WriteLine("Error loading color configuration, default color will be used...");
                     Colors = new RGBAColor[96];
                     Array.Copy(Global.DefaultColors, Colors, 96);
                 }
             }
-            Console.WriteLine("颜色加载完成. 共 {0} 种颜色.", Colors.Length);
+            Console.WriteLine("The colors are loaded. Total {0} colors.", Colors.Length);
         }
 
         private CustomColor()
