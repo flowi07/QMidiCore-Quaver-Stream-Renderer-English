@@ -121,8 +121,6 @@ namespace QQS_UI.Core
                 trkInfo[i].Data = (byte*)UnsafeMemory.Allocate(trkInfo[i].Size);
                 _ = stream.Read(trkInfo[i].Data, trkInfo[i].Size, 1);
 
-                Console.WriteLine("Copy the information of track #{0}. Track size: {1} bytes.", i, trkInfo[i].Size);
-
                 Console.WriteLine("Loading track #{0}. Track size: {1} bytes.", i, trkInfo[i].Size);
 
             }
@@ -271,8 +269,6 @@ namespace QQS_UI.Core
                     }
                 }
 
-                Console.WriteLine("Track #{0} Parsing complete. Number of notes: {1}.", i, nl.Count);
-
                 Console.WriteLine("Track #{0} parsing complete. Number of notes: {1}.", i, nl.Count);
 
                 UnsafeMemory.Free(trkInfo[i].Data);
@@ -290,8 +286,6 @@ namespace QQS_UI.Core
             Tempos.TrimExcess();
 
             Console.WriteLine("Processing MIDI events...");
-
-            Console.WriteLine("Processing Midi events...");
 
             for (int i = 0; i != TrackCount; ++i)
             {
@@ -334,11 +328,6 @@ namespace QQS_UI.Core
             Console.WriteLine("MIDI event processing complete. Total notes: {0}.", NoteCount);
             Console.WriteLine("OR processing...");
             _ = Parallel.For(0, 128, opt, [MethodImpl(MethodImplOptions.AggressiveOptimization)] (i) =>
-
-            Console.WriteLine("Midi event processing completed. Total number of notes: {0}.", NoteCount);
-            Console.WriteLine("The Midi file is being OR'd.");
-            _ = Parallel.For(0, 128, opt, (i) =>
-
             {
                 UnmanagedList<Note> nl = Notes[i];
                 if (nl.Count < 10)
@@ -363,8 +352,6 @@ namespace QQS_UI.Core
 
             Console.WriteLine("OR Processing completed.");
 
-            Console.WriteLine("OR processing is complete.");
-
         }
         public RenderFile(string path)
         {
@@ -377,9 +364,7 @@ namespace QQS_UI.Core
             Parse();
             sw.Stop();
 
-            Console.WriteLine("Loading Midi took: {0:F2} s.", sw.ElapsedMilliseconds / 1000.0);
-
-            Console.WriteLine("Loading Midi Time: {0:F2} s.", sw.ElapsedMilliseconds / 1000.0);
+            Console.WriteLine("Loading MIDI took: {0:F2} s.", sw.ElapsedMilliseconds / 1000.0);
 
         }
 

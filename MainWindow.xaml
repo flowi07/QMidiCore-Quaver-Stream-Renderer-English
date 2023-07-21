@@ -306,7 +306,7 @@
                             </ui:ValueSlider>
                         </DockPanel>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Note Fade Direction:" Width="180" HorizontalAlignment="Left"/>n
+                            <Label Content="Note Fade Direction:" Width="180" HorizontalAlignment="Left"/>
                             <ComboBox HorizontalAlignment="Left" Width="180" SelectedIndex="0" VerticalContentAlignment="Center" x:Name="noteGradientDirection" SelectionChanged="noteGradientDirection_SelectionChanged">
                                 <ComboBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
