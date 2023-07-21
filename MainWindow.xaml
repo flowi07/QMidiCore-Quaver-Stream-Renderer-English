@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         FontFamily="Segoe UI"
         Title="QMidiCore Quaver Stream Renderer 1.6.0" Height="540" Width="960" Background="#FDFDFD">
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -63,7 +64,7 @@
                                 </Button>
                             </DockPanel>
                             <DockPanel Margin="0,10,0,0">
-                                <Label Content="Total notes:" HorizontalAlignment="Left" Width="100"/>
+                                <Label Content="Notes:" HorizontalAlignment="Left" Width="100"/>
                                 <Label Content="-" Width="150" HorizontalAlignment="Left" x:Name="noteCount"/>
                             </DockPanel>
                             <DockPanel Margin="0,0,0,0">
@@ -101,7 +102,7 @@
                                 </ui:NumberSelect>
                             </DockPanel>
                             <DockPanel Margin="0,10,0,0">
-                                <ui:BetterCheckbox Text="Small Square in Center" Margin="0,0,0,0" IsChecked="False" x:Name="drawGreySquare" CheckToggled="drawGreySquare_CheckToggled">
+                                <ui:BetterCheckbox Text="Square C" Margin="0,0,0,0" IsChecked="False" x:Name="drawGreySquare" CheckToggled="drawGreySquare_CheckToggled">
                                     <ui:BetterCheckbox.IsEnabled>
                                         <MultiBinding Converter="{StaticResource AndValueConverter}">
                                             <Binding ElementName="drawKeyboard" Path="IsChecked"/>
@@ -111,10 +112,10 @@
                                 </ui:BetterCheckbox>
                             </DockPanel>
                             <DockPanel Margin="0,5,0,0">
-                                <ui:BetterCheckbox Text="Draw Keys" Margin="0,0,0,0" IsEnabled="{DynamicResource notRenderingOrPreviewing}" IsChecked="True" x:Name="drawKeyboard" CheckToggled="drawKeyboard_CheckToggled"/>
+                                <ui:BetterCheckbox Text="Keyboard" Margin="0,0,0,0" IsEnabled="{DynamicResource notRenderingOrPreviewing}" IsChecked="True" x:Name="drawKeyboard" CheckToggled="drawKeyboard_CheckToggled"/>
                             </DockPanel>
                             <DockPanel Margin="0,5,0,0">
-                                <ui:BetterCheckbox Text="Draw Splitbar" HorizontalAlignment="Left" x:Name="enableSeparator" CheckToggled="enableSeparator_CheckToggled" IsChecked="True">
+                                <ui:BetterCheckbox Text="Splitbar" HorizontalAlignment="Left" x:Name="enableSeparator" CheckToggled="enableSeparator_CheckToggled" IsChecked="True">
                                     <ui:BetterCheckbox.IsEnabled>
                                         <MultiBinding Converter="{StaticResource AndValueConverter}">
                                             <Binding ElementName="notRenderingOrPreviewing" Path="IsEnabled"/>
@@ -140,7 +141,7 @@
                                 </Button>
                             </DockPanel>
                             <DockPanel Margin="0,10,0,0">
-                                <Label Content="BG Color (RGB):" Width="150" HorizontalAlignment="Left"/>
+                                <Label Content="BG color (RGB):" Width="150" HorizontalAlignment="Left"/>
                                 <Label Content="#"/>
                                 <TextBox Text="000000" HorizontalAlignment="Left" Width="120" MaxLength="6" x:Name="bgColor"/>
                                 <Border Background="Black" Margin="10,0,0,0" Width="30">
@@ -151,14 +152,14 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Effects" Style="{StaticResource SubTabItems}" Foreground="Black">
+                <TabItem Header="Effects" Style="{StaticResource SubTabItems}">
                     <StackPanel Margin="0,15,0,0">
-                        <Label Content="Video Effects" FontSize="20"/>
+                        <Label Content="Effects" FontSize="20"/>
                         <DockPanel Margin="0,15,0,0">
-                            <ui:BetterCheckbox Text="Thin Notes" HorizontalAlignment="Left" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="thinnerNotes" CheckToggled="thinnerNotes_CheckToggled" IsChecked="True"/>
+                            <ui:BetterCheckbox Text="Thinner notes" HorizontalAlignment="Left" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="thinnerNotes" CheckToggled="thinnerNotes_CheckToggled" IsChecked="True"/>
                         </DockPanel>
                         <DockPanel Margin="0,5,0,0">
-                            <ui:BetterCheckbox Text="Fade Effects (requires note borders)" HorizontalAlignment="Left" Margin="0,0,0,0" x:Name="enableNoteColorGradient" CheckToggled="enableNoteColorGradient_CheckToggled" IsChecked="True">
+                            <ui:BetterCheckbox Text="Enable fade effect (note border needs to be checked)" HorizontalAlignment="Left" Margin="0,0,0,0" x:Name="enableNoteColorGradient" CheckToggled="enableNoteColorGradient_CheckToggled" IsChecked="True">
                                 <ui:BetterCheckbox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
                                         <Binding Path="IsEnabled" ElementName="notRenderingOrPreviewing"/>
@@ -168,7 +169,7 @@
                             </ui:BetterCheckbox>
                         </DockPanel>
                         <DockPanel Margin="0,5,0,0">
-                            <ui:BetterCheckbox Text="White Key Shade" HorizontalAlignment="Left" x:Name="whiteKeyShade" IsChecked="True" CheckToggled="whiteKeyShade_CheckToggled">
+                            <ui:BetterCheckbox Text="White key shade" HorizontalAlignment="Left" x:Name="whiteKeyShade" IsChecked="True" CheckToggled="whiteKeyShade_CheckToggled">
                                 <ui:BetterCheckbox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
                                         <Binding Path="IsChecked" ElementName="drawKeyboard"/>
@@ -178,7 +179,7 @@
                             </ui:BetterCheckbox>
                         </DockPanel>
                         <DockPanel Margin="0,5,0,0">
-                            <ui:BetterCheckbox Text="Better Black Keys" HorizontalAlignment="Left" x:Name="betterBlackKeys" CheckToggled="betterBlackKeys_CheckToggled" IsChecked="True">
+                            <ui:BetterCheckbox Text="Better black keys" HorizontalAlignment="Left" x:Name="betterBlackKeys" CheckToggled="betterBlackKeys_CheckToggled" IsChecked="True">
                                 <ui:BetterCheckbox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
                                         <Binding Path="IsChecked" ElementName="drawKeyboard"/>
@@ -217,7 +218,7 @@
                                     </MultiBinding>
                                 </ui:ValueSlider.IsEnabled>
                             </ui:ValueSlider>
-                            <Label Content="Width Note Border" Width="160" HorizontalAlignment="Left" Margin="15,0,0,0"/>
+                            <Label Content="Note border width" Width="160" HorizontalAlignment="Left" Margin="15,0,0,0"/>
                             <ui:ValueSlider Minimum="0.5" Maximum="2.5" Value="1" x:Name="noteBorderWidth" Step="0.1" ValueChanged="noteBorderWidth_ValueChanged" DecimalPoints="2" TrueMax="2.5" TrueMin="0.5" Width="220">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -228,7 +229,7 @@
                             </ui:ValueSlider>
                         </DockPanel>
                         <DockPanel Margin="0,0,0,0">
-                            <Label Content="Notes Alpha" Width="160"/>
+                            <Label Content="Note Opacity" Width="160"/>
                             <ui:ValueSlider Minimum="30" Maximum="255" Width="220" Value="144" TrueMin="30" TrueMax="255" Step="10" DecimalPoints="1" x:Name="noteAlpha" ValueChanged="noteAlpha_ValueChanged" HorizontalAlignment="Left">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -248,7 +249,7 @@
                             </ui:ValueSlider>
                         </DockPanel>
                         <DockPanel>
-                            <Label Content="Pressed Note Shade" Width="160" HorizontalAlignment="Left"/>
+                            <Label Content="Whitening intensity" Width="160" HorizontalAlignment="Left"/>
                             <ui:ValueSlider Minimum="0" Maximum="255" HorizontalAlignment="Left" Width="220" Value="80" x:Name="pressedNoteShadeDecrement" ValueChanged="pressedNoteShadeDecrement_ValueChanged" TrueMin="0" TrueMax="255" DecimalPoints="0" Step="10">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -305,7 +306,7 @@
                             </ui:ValueSlider>
                         </DockPanel>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Note Fade Direction:" Width="180" HorizontalAlignment="Left"/>
+                            <Label Content="Note Fade Direction:" Width="180" HorizontalAlignment="Left"/>n
                             <ComboBox HorizontalAlignment="Left" Width="180" SelectedIndex="0" VerticalContentAlignment="Center" x:Name="noteGradientDirection" SelectionChanged="noteGradientDirection_SelectionChanged">
                                 <ComboBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">

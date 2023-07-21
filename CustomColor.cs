@@ -30,12 +30,16 @@ namespace QQS_UI
                 }
                 catch
                 {
+
                     Console.WriteLine("Error loading colors configuration, default colors will be used...");
+
                     Colors = new RGBAColor[96];
                     Array.Copy(Global.DefaultColors, Colors, 96);
                 }
             }
-            Console.WriteLine("Colors loading is complete. There are {0} colors.", Colors.Length);
+
+            Console.WriteLine("The colors are loaded. Total {0} colors.", Colors.Length);
+
         }
 
         private CustomColor()
