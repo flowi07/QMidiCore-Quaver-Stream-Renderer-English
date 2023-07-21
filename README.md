@@ -1,4 +1,4 @@
-QMidiCore Quaver Stream Renderer (QQS for short) is a black sheet music renderer. The original author is qishipai.
+# QMidiCore Quaver Stream Renderer (QQS for short) is a black sheet music renderer. The original author is qishipai.
 
 ### Project reference
 - SharpExtension Provides some methods of allocating, freeing unmanaged memory and stream operations.
