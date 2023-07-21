@@ -14,16 +14,16 @@ namespace QQS_UI
         public string ColorDirectory;
     }
     /// <summary>
-    /// 表示用于存储Midi文件夹路径和Video文件夹路径.
+    /// Indicates the Midi folder path and Video folder path.
     /// </summary>
     public class Config
     {
         private DialogPath ConfigPath;
         private readonly string ConfigName;
         /// <summary>
-        /// 初始化一个新的 <see cref="Config"/> 实例.
+        /// Initialize a new <see cref="Config"/> example.
         /// </summary>
-        /// <param name="configName">配置文件的文件名, 需要".json"后缀.</param>
+        /// <param name="configName">Configuration file name, need ".json" suffix.</param>
         public Config(string configName = "config.json")
         {
             ConfigName = configName;

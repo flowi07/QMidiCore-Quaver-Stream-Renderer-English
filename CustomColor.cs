@@ -43,10 +43,10 @@ namespace QQS_UI
 
         }
         /// <summary>
-        /// 将指定的文件的颜色加载到当前实例中.
+        /// Loads the color of the specified file into the current instance.
         /// </summary>
-        /// <param name="colorFileName">颜色文件路径.</param>
-        /// <returns>如果文件不存在, 返回-1; 如果加载时出现问题, 返回1; 如果没有错误, 返回0.</returns>
+        /// <param name="colorFileName">Color file path.</param>
+        /// <returns>If the file does not exist, -1; if there is a problem loading it, 1; if there is no error, 0.</returns>
         public int Load(string colorFileName)
         {
             if (!File.Exists(colorFileName))
@@ -68,17 +68,12 @@ namespace QQS_UI
         }
 
         /// <summary>
-        /// 将当前实例的颜色拷贝到<see cref="Global.KeyColors"/>中.<br/>
         /// Copy colors owned by current instance to <see cref="Global.KeyColors"/>.
         /// </summary>
         /// <remarks>
-        /// 请注意: 这不是一个线程安全操作.<br/>
         /// This is not a thread-safe operation.
         /// </remarks>
         /// <returns>
-        /// 如果当前颜色为<see langword="null"/>, 返回-1;<br/>
-        /// 如果当前颜色不为<see langword="null"/>, 但是长度为0, 返回1;<br/>
-        /// 如果操作无异常, 返回0.<br/>
         /// If colors owned by <see langword="this"/> is null then -1 will be returned;<br/>
         /// If the color array owned by <see langword="this"/> is not null but its length equals 0, then 1 is returned;<br/>
         /// If the operation is successful, returns 0.
