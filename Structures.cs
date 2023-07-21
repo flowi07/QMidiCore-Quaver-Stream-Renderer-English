@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QQSAPI
+namespace QQS_UI
 {
     public struct Note
     {

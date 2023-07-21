@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using QQS_UI.Core;
 
+#nullable disable
 namespace QQS_UI
 {
     public class CustomColor
@@ -16,7 +16,7 @@ namespace QQS_UI
         {
             if (!File.Exists(colorFileName))
             {
-                string colors = JsonConvert.SerializeObject(Global.KeyColors);
+                string colors = JsonSerializer.Serialize(Global.KeyColors);
                 File.WriteAllText(colorFileName, colors);
                 Colors = new RGBAColor[96];
                 Array.Copy(Global.DefaultColors, Colors, 96);
@@ -26,16 +26,20 @@ namespace QQS_UI
                 try
                 {
                     string colorData = File.ReadAllText(colorFileName);
-                    Colors = JsonConvert.DeserializeObject<RGBAColor[]>(colorData);
+                    Colors = JsonSerializer.Deserialize<RGBAColor[]>(colorData);
                 }
                 catch
                 {
-                    Console.WriteLine("Error loading color configuration, default color will be used...");
+
+                    Console.WriteLine("Error loading colors configuration, default colors will be used...");
+
                     Colors = new RGBAColor[96];
                     Array.Copy(Global.DefaultColors, Colors, 96);
                 }
             }
+
             Console.WriteLine("The colors are loaded. Total {0} colors.", Colors.Length);
+
         }
 
         private CustomColor()
@@ -43,10 +47,10 @@ namespace QQS_UI
 
         }
         /// <summary>
-        /// 将指定的文件的颜色加载到当前实例中.
+        /// Loads the color of the specified file into the current instance.
         /// </summary>
-        /// <param name="colorFileName">颜色文件路径.</param>
-        /// <returns>如果文件不存在, 返回-1; 如果加载时出现问题, 返回1; 如果没有错误, 返回0.</returns>
+        /// <param name="colorFileName">Color file path.</param>
+        /// <returns>If the file does not exist, -1; if there is a problem loading it, 1; if there is no error, 0.</returns>
         public int Load(string colorFileName)
         {
             if (!File.Exists(colorFileName))
@@ -57,7 +61,7 @@ namespace QQS_UI
             RGBAColor[] lastColors = Colors;
             try
             {
-                Colors = JsonConvert.DeserializeObject<RGBAColor[]>(colorData);
+                Colors = JsonSerializer.Deserialize<RGBAColor[]>(colorData);
             }
             catch
             {
@@ -68,17 +72,12 @@ namespace QQS_UI
         }
 
         /// <summary>
-        /// 将当前实例的颜色拷贝到<see cref="Global.KeyColors"/>中.<br/>
         /// Copy colors owned by current instance to <see cref="Global.KeyColors"/>.
         /// </summary>
         /// <remarks>
-        /// 请注意: 这不是一个线程安全操作.<br/>
         /// This is not a thread-safe operation.
         /// </remarks>
         /// <returns>
-        /// 如果当前颜色为<see langword="null"/>, 返回-1;<br/>
-        /// 如果当前颜色不为<see langword="null"/>, 但是长度为0, 返回1;<br/>
-        /// 如果操作无异常, 返回0.<br/>
         /// If colors owned by <see langword="this"/> is null then -1 will be returned;<br/>
         /// If the color array owned by <see langword="this"/> is not null but its length equals 0, then 1 is returned;<br/>
         /// If the operation is successful, returns 0.
@@ -109,7 +108,7 @@ namespace QQS_UI
 
         public CustomColor Shuffle()
         {
-            CustomColor shuffled = new CustomColor
+            CustomColor shuffled = new()
             {
                 Colors = new RGBAColor[Colors.Length]
             };
@@ -131,6 +130,18 @@ namespace QQS_UI
             }
 
             return shuffled;
+        }
+
+        public CustomColor Exchange(RGBAColor[] colors)
+        {
+            CustomColor old = new()
+            {
+                Colors = new RGBAColor[Colors.Length]
+            };
+            Array.Copy(Colors, old.Colors, Colors.Length);
+            Colors = new RGBAColor[colors.Length];
+            colors.CopyTo(Colors, 0);
+            return old;
         }
     }
 }

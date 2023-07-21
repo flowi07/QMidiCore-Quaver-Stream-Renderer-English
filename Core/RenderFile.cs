@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using SharpExtension.IO;
 using SharpExtension;
 using SharpExtension.Collections;
-using QQSAPI;
 
 namespace QQS_UI.Core
 {
@@ -121,14 +120,18 @@ namespace QQS_UI.Core
                 };
                 trkInfo[i].Data = (byte*)UnsafeMemory.Allocate(trkInfo[i].Size);
                 _ = stream.Read(trkInfo[i].Data, trkInfo[i].Size, 1);
+
+                Console.WriteLine("Copy the information of track #{0}. Track size: {1} bytes.", i, trkInfo[i].Size);
+
                 Console.WriteLine("Loading track #{0}. Track size: {1} bytes.", i, trkInfo[i].Size);
+
             }
             stream.Dispose();
             for (int i = 0; i != 128; ++i)
             {
                 Notes[i] = new UnmanagedList<Note>();
             }
-            ParallelOptions opt = new ParallelOptions
+            ParallelOptions opt = new()
             {
                 MaxDegreeOfParallelism = Global.MaxMIDILoaderConcurrency
             };
@@ -267,7 +270,11 @@ namespace QQS_UI.Core
                             break;
                     }
                 }
+
+                Console.WriteLine("Track #{0} Parsing complete. Number of notes: {1}.", i, nl.Count);
+
                 Console.WriteLine("Track #{0} parsing complete. Number of notes: {1}.", i, nl.Count);
+
                 UnsafeMemory.Free(trkInfo[i].Data);
                 trkInfo[i].Data = null;
                 trkInfo[i].TrackTime = trkTime;
@@ -281,7 +288,11 @@ namespace QQS_UI.Core
                 NoteCount += trkInfo[i].Notes.Count;
             }
             Tempos.TrimExcess();
+
+            Console.WriteLine("Processing MIDI events...");
+
             Console.WriteLine("Processing Midi events...");
+
             for (int i = 0; i != TrackCount; ++i)
             {
                 if (trkInfo[i].Notes.Count == 0)
@@ -319,19 +330,26 @@ namespace QQS_UI.Core
             Tempos.AddRange(arr);
             arr.Dispose();
 
+
+            Console.WriteLine("MIDI event processing complete. Total notes: {0}.", NoteCount);
+            Console.WriteLine("OR processing...");
+            _ = Parallel.For(0, 128, opt, [MethodImpl(MethodImplOptions.AggressiveOptimization)] (i) =>
+
             Console.WriteLine("Midi event processing completed. Total number of notes: {0}.", NoteCount);
             Console.WriteLine("The Midi file is being OR'd.");
             _ = Parallel.For(0, 128, opt, (i) =>
+
             {
                 UnmanagedList<Note> nl = Notes[i];
                 if (nl.Count < 10)
                 {
                     return;
                 }
+                Note* pnl = (Note*)UnsafeMemory.GetActualAddressOf(ref nl[0]);
                 for (long index = 0, len = nl.Count - 2; index != len;)
                 {
-                    ref Note curr = ref nl[index++];
-                    ref Note next = ref nl[index];
+                    ref Note curr = ref pnl[index++];
+                    ref Note next = ref pnl[index];
                     if (curr.Start < next.Start && curr.End > next.Start && curr.End < next.End)
                     {
                         curr.End = next.Start;
@@ -342,7 +360,11 @@ namespace QQS_UI.Core
                     }
                 }
             });
+
+            Console.WriteLine("OR Processing completed.");
+
             Console.WriteLine("OR processing is complete.");
+
         }
         public RenderFile(string path)
         {
@@ -354,7 +376,11 @@ namespace QQS_UI.Core
             Stopwatch sw = Stopwatch.StartNew();
             Parse();
             sw.Stop();
+
+            Console.WriteLine("Loading Midi took: {0:F2} s.", sw.ElapsedMilliseconds / 1000.0);
+
             Console.WriteLine("Loading Midi Time: {0:F2} s.", sw.ElapsedMilliseconds / 1000.0);
+
         }
 
         public string MidiPath { get; }

@@ -22,18 +22,14 @@ namespace QQS_UI
         }
 
         /// <summary>
-        /// 判断PFA配置文件是否可用.<br/>
         /// Determines whether PFA configuration is available.
         /// </summary>
         public static bool IsConfigurationAvailable => ConfigurationPath != null;
 
         /// <summary>
-        /// 加载 PFA Config的颜色.<br/>
         /// Load colors from PFA configuration if possible.
         /// </summary>
         /// <returns>
-        /// 如果无法加载配置, 返回<see langword="null"/>;<br/>
-        /// 如果加载成功, 则以数组的形式返回这些颜色.<br/>
         /// If it fails to load PFA configuration, <see langword="null"/> will be returned.<br/>
         /// If it succeeds in loading config, then an array containing these colors will be returned.
         /// </returns>
@@ -43,13 +39,13 @@ namespace QQS_UI
             {
                 return null;
             }
-            XmlDocument doc = new XmlDocument();
+            XmlDocument doc = new();
             doc.Load(ConfigurationPath);
             XmlNode rootNode = doc.SelectSingleNode("PianoFromAbove");
             XmlNode visualNode = rootNode.SelectSingleNode("Visual");
             XmlNode colors = visualNode.SelectSingleNode("Colors");
             XmlNodeList actualColors = colors.SelectNodes("Color");
-            List<RGBAColor> retColors = new List<RGBAColor>();
+            List<RGBAColor> retColors = new();
             foreach (XmlNode node in actualColors)
             {
                 byte r = byte.Parse(node.Attributes[0].Value);
@@ -63,7 +59,7 @@ namespace QQS_UI
                     A = 0xFF
                 });
             }
-            Console.WriteLine("PFA configuration color parsing is complete. There are {0} colors in total.", retColors.Count);
+            Console.WriteLine("PFA configuration color parsing complete. There are {0} colors.", retColors.Count);
             return retColors.ToArray();
         }
     }

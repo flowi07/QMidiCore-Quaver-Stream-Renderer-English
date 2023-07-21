@@ -11,7 +11,7 @@ namespace QQS_UI.Core
     /// <summary>
     /// 简单地封装操作ffmpeg的逻辑.
     /// </summary>
-    public unsafe struct FFMpeg : IDisposable
+    public readonly unsafe struct FFMpeg : IDisposable
     {
         private readonly CStream stream;
         private readonly ulong frameSize;
@@ -19,8 +19,8 @@ namespace QQS_UI.Core
         /// 初始化一个新的 <see cref="FFMpeg"/> 实例.
         /// </summary>
         /// <param name="ffargs">初始化ffmpeg的参数.</param>
-        /// <param name="width">输入视频的宽.</param>
-        /// <param name="height">输入视频的高.</param>
+        /// <param name="width">输入Video的宽.</param>
+        /// <param name="height">输入Video的高.</param>
         public FFMpeg(string ffargs, int width, int height)
         {
             string ffcommand;
@@ -32,12 +32,13 @@ namespace QQS_UI.Core
         /// 向 FFMpeg 写入一帧.<br/>
         /// Write a frame to FFMpeg.
         /// </summary>
-        /// <param name="buffer">存有视频画面的缓冲区.</param>
+        /// <param name="buffer">存有Video画面的缓冲区.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteFrame(in void* buffer)
         {
             _ = stream.WriteWithoutLock(buffer, frameSize, 1);
         }
+
         public void Dispose()
         {
             if (!stream.Closed)

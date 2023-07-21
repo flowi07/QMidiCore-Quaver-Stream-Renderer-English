@@ -7,5 +7,5 @@
     <media:Color x:Key="PrimaryColor" >#0E8DB2</media:Color>
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
 
-    <FontFamily x:Key="Font">Microsoft Yahei Light</FontFamily>
+    <FontFamily x:Key="Font">Segoe UI</FontFamily>
 </ResourceDictionary>

@@ -14,11 +14,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+//using System.Windows.Shapes;
 using QQS_UI.Core;
 using Path = System.IO.Path;
 using System.Diagnostics;
 using System.Threading;
+using System.Drawing;
+using System.Drawing.Imaging;
+using Color = System.Windows.Media.Color;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace QQS_UI
 {
@@ -101,9 +106,13 @@ namespace QQS_UI
 
         private void openMidi_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog
+            if (!Directory.Exists(config.CachedMIDIDirectory))
             {
-                Filter = "Midi File (*.mid)|*.mid",
+                config.CachedMIDIDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            }
+            OpenFileDialog dialog = new()
+            {
+                Filter = "MIDI File (*.mid)|*.mid",
                 InitialDirectory = config.CachedMIDIDirectory
             };
             if ((bool)dialog.ShowDialog())
@@ -124,7 +133,7 @@ namespace QQS_UI
             string fileName = midiPath.Text;
             if (!File.Exists(fileName) || !fileName.EndsWith(".mid"))
             {
-                _ = MessageBox.Show("Incorrect Midi path!", "Unable to load Midi file");
+                _ = MessageBox.Show("Incorrect MIDI path!" , "Unable to load MIDI file");
                 return;
             }
             trackCount.Content = "Loading...";
@@ -154,7 +163,7 @@ namespace QQS_UI
             file = null;
             GC.Collect(gen);
             Resources["midiLoaded"] = false;
-            Console.WriteLine("Midi unloaded.");
+            Console.WriteLine("Loaded.");
             noteCount.Content = "-";
             trackCount.Content = "-";
             midiLen.Content = "--:--.---";
@@ -168,10 +177,14 @@ namespace QQS_UI
 
         private void selectOutput_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog dialog = new SaveFileDialog()
+            if (!Directory.Exists(config.CachedVideoDirectory))
+            {
+                config.CachedVideoDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+            }
+            SaveFileDialog dialog = new()
             {
                 Filter = options.TransparentBackground ? TransparentVideoFilter : DefaultVideoFilter,
-                Title = "Select the location to save the output video",
+                Title = "Select a location to save the output video",
                 InitialDirectory = config.CachedVideoDirectory
             };
             if ((bool)dialog.ShowDialog())
@@ -186,7 +199,7 @@ namespace QQS_UI
         {
             if (file == null)
             {
-                _ = MessageBox.Show("Unable to render: \nMidi file is empty. Please check if the Midi file is loaded.", "No Midi file");
+                _ = MessageBox.Show("Unable to render: \nMIDI file is empty. Please check if a MIDI file is loaded." , "No MIDI file");
                 return;
             }
             options.Input = midiPath.Text;
@@ -197,7 +210,7 @@ namespace QQS_UI
             renderer = new CommonRenderer(file, options);
             _ = Task.Run(() =>
             {
-                Console.WriteLine("Preparing to render...");
+                Console.WriteLine("Prepare for rendering...");
                 renderer.Render();
                 int gen = GC.GetGeneration(renderer);
                 Dispatcher.Invoke(() =>
@@ -229,7 +242,7 @@ namespace QQS_UI
             {
                 if (!outputPath.Text.EndsWith(".mov"))
                 {
-                    outputPath.Text = outputPath.Text.Substring(0, outputPath.Text.Length - 4) + ".mov";
+                    outputPath.Text = string.Concat(outputPath.Text.AsSpan(0, outputPath.Text.Length - 4), ".mov");
                 }
                 if (!additionalFFArgs.Text.ToLower().Contains("-vodec png"))
                 {
@@ -241,7 +254,7 @@ namespace QQS_UI
         {
             if (file == null)
             {
-                _ = MessageBox.Show("Cannot preview: \nMidi file is empty. Please check if the Midi file is loaded.", "No Midi file");
+                _ = MessageBox.Show("Unable to render: \nMIDI file is empty. Please check if a MIDI file is loaded." , "No MIDI file");
                 return;
             }
             options.Input = midiPath.Text;
@@ -252,7 +265,7 @@ namespace QQS_UI
             renderer = new CommonRenderer(file, options);
             _ = Task.Run(() =>
             {
-                Console.WriteLine("Prepare to preview...");
+                Console.WriteLine("Prepare for preview...");
                 renderer.Render();
                 int gen = GC.GetGeneration(renderer);
                 Dispatcher.Invoke(() =>
@@ -268,42 +281,41 @@ namespace QQS_UI
         {
             customColors.UseDefault();
             customColors.SetGlobal();
-            _ = MessageBox.Show("Color reset is complete.", "Color reset complete");
+            _ = MessageBox.Show("Color reset complete." , "Color reset complete.");
         }
 
         private void loadColors_Click(object sender, RoutedEventArgs e)
         {
             string filePath = colorPath.Text;
-            if (!filePath.EndsWith(".json"))
-            {
-                _ = MessageBox.Show("Unable to load color file. \n currently only supports color files in .json format.", "Unable to load colors");
-                return;
-            }
             if (!File.Exists(filePath))
             {
-                _ = MessageBox.Show("Unable to load color file: file does not exist.", "Unable to load color");
+                _ = MessageBox.Show("Unable to load color file: file does not exist." , "Unable to load color");
                 return;
             }
             int errCode = customColors.Load(filePath);
             if (errCode == 1)
             {
-                _ = MessageBox.Show("An error occurred while loading a color file: This file format is not compatible with the supported color files.", "Unable to load colors");
+                _ = MessageBox.Show("An error occurred loading the color file: This file format is not compatible with supported color files." , "Unable to load color");
                 return;
             }
             errCode = customColors.SetGlobal();
             if (errCode != 0)
             {
-                _ = MessageBox.Show("An error occurred while setting the color: The color is empty.", "Unable to set color");
+                _ = MessageBox.Show("An error occurred while setting the color: color is empty." , "Unable to set color");
                 return;
             }
-            _ = MessageBox.Show("Colors loaded successfully. Total loaded: " + customColors.Colors.Length + " Colors.", "Color loading completed");
+            _ = MessageBox.Show("Color loaded successfully. Total colors loaded: " + customColors.Colors.Length + " colors." , "Color loading complete");
         }
 
         private void openColorFile_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dialog = new OpenFileDialog
+            if (!Directory.Exists(config.CachedColorDirectory))
             {
-                Filter = "JSON file (*.json)|*.json",
+                config.CachedColorDirectory = Directory.GetCurrentDirectory();
+            }
+            OpenFileDialog dialog = new()
+            {
+                Filter = "JSON File (*.json)|*.json",
                 InitialDirectory = config.CachedColorDirectory
             };
             if ((bool)dialog.ShowDialog())
@@ -330,7 +342,7 @@ namespace QQS_UI
             }
             catch (Exception ex)
             {
-                _ = MessageBox.Show($"An error occurred while loading PFA configuration colors: \n{ex.Message}\nStack tracing: \n{ex.StackTrace}", "Unable to load PFA configuration");
+                _ = MessageBox.Show($"Error loading PFA configuration colors: \n{ex.Message}\n Stack Trace: \n{ex.StackTrace}", "Unable to load PFA configuration");
             }
         }
 
@@ -339,12 +351,12 @@ namespace QQS_UI
             string coltxt = bgColor.Text;
             if (coltxt.Length != 6)
             {
-                _ = MessageBox.Show("The current color code does not conform to the specification. \nA color code should consist of 6 digits expressed in hexadecimal.", "Unable to set color");
+                _ = MessageBox.Show("The current color code does not conform to the specification . \n A color code should consist of 6 digits in hexadecimal representation." , "Unable to set color");
                 return;
             }
             try
             {
-                byte r = Convert.ToByte(coltxt.Substring(0, 2), 16);
+                byte r = Convert.ToByte(coltxt[..2], 16);
                 byte g = Convert.ToByte(coltxt.Substring(2, 2), 16);
                 byte b = Convert.ToByte(coltxt.Substring(4, 2), 16);
                 uint col = 0xff000000U | r | (uint)(g << 8) | (uint)(b << 16);
@@ -359,7 +371,7 @@ namespace QQS_UI
             }
             catch
             {
-                _ = MessageBox.Show("Error: Unable to parse color code. \nPlease check if the color code entered is correct.", "Unable to set color");
+                _ = MessageBox.Show("Error: Unable to parse color code. \nPlease check if the color code entered is correct." , "Unable to set color.");
             }
         }
 
@@ -670,12 +682,75 @@ namespace QQS_UI
             options.PressedNotesShadeDecrement = 255 - (int)e.NewValue;
         }
 
+        private void loadBmpColors_Click(object sender, RoutedEventArgs e)
+        {
+            string imagePath = colorBmpPath.Text;
+            if (!File.Exists(imagePath))
+            {
+                _ = MessageBox.Show("An error occurred loading the color file: file does not exist", "Unable to load color");
+                return;
+            }
+            try
+            {
+                using Bitmap bmp = new(imagePath);
+                int bmpWidth = bmp.Width, bmpHeight = bmp.Height;
+                BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmpWidth, bmpHeight), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+
+                int numBytes = data.Stride * bmpHeight;
+                RGBAColor[] pickedColors = new RGBAColor[numBytes / 4];
+
+                unsafe
+                {
+                    fixed (RGBAColor* pDest = pickedColors)
+                    {
+                        RGBAColor* first = (RGBAColor*)data.Scan0;
+                        Buffer.MemoryCopy(first, pDest, numBytes, numBytes);
+                    }
+                }
+                
+                bmp.UnlockBits(data);
+
+                customColors.Exchange(pickedColors);
+                int errCode = customColors.SetGlobal();
+                if (errCode != 0)
+                {
+                    _ = MessageBox.Show("An error occurred while setting the color: Color is empty." , "Unable to set color");
+                    return;
+                }
+                _ = MessageBox.Show("Color loaded successfully. Total colors loaded: " + customColors.Colors.Length + " colors." , "Color loading complete");
+            }
+            catch (Exception ex)
+            {
+                _ = MessageBox.Show($"An error occurred loading the color file: \n{ex.Message}\n Stack Trace: \n{ex.StackTrace}", "Unable to convert color");
+            }
+        }
+
+        private void openBmpColorFile_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Directory.Exists(config.CachedColorDirectory))
+            {
+                config.CachedColorDirectory = Directory.GetCurrentDirectory();
+            }
+            OpenFileDialog dialog = new()
+            {
+                Filter = "Bitmap Images (*.bmp, *.jpg, *.png)|*.bmp;*.jpg;*.png",
+                InitialDirectory = config.CachedColorDirectory
+            };
+            if ((bool)dialog.ShowDialog())
+            {
+                string colorDirectory = Path.GetDirectoryName(Path.GetFullPath(dialog.FileName));
+                config.CachedColorDirectory = colorDirectory;
+                colorBmpPath.Text = dialog.FileName;
+                config.SaveConfig();
+            }
+        }
+
         private void setBarColor_Click(object sender, RoutedEventArgs e)
         {
             string coltxt = barColor.Text;
             if (coltxt.Length != 6)
             {
-                _ = MessageBox.Show("The current color code does not conform to the specification. \nA color code should consist of 6 digits expressed in hexadecimal.", "Unable to set color");
+                _ = MessageBox.Show("The current color code does not conform to the specification . \n A color code should consist of 6 digits in hexadecimal representation." , "Unable to set color");
                 return;
             }
             try
@@ -695,7 +770,7 @@ namespace QQS_UI
             }
             catch
             {
-                _ = MessageBox.Show("Error: Unable to parse color code. \nPlease check if the color code entered is correct.", "Unable to set color");
+                _ = MessageBox.Show("Error: Unable to parse color code. \nPlease check if the color code entered is correct." , "Unable to set color.");
             }
         }
     }

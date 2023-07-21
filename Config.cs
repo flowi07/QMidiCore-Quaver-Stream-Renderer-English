@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace QQS_UI
@@ -15,16 +14,16 @@ namespace QQS_UI
         public string ColorDirectory;
     }
     /// <summary>
-    /// 表示用于存储Midi文件夹路径和视频文件夹路径.
+    /// Indicates the Midi folder path and Video folder path.
     /// </summary>
     public class Config
     {
         private DialogPath ConfigPath;
         private readonly string ConfigName;
         /// <summary>
-        /// 初始化一个新的 <see cref="Config"/> 实例.
+        /// Initialize a new <see cref="Config"/> example.
         /// </summary>
-        /// <param name="configName">配置文件的文件名, 需要".json"后缀.</param>
+        /// <param name="configName">Configuration file name, need ".json" suffix.</param>
         public Config(string configName = "config.json")
         {
             ConfigName = configName;
@@ -33,7 +32,7 @@ namespace QQS_UI
                 try
                 {
                     string jsonData = File.ReadAllText(configName);
-                    ConfigPath = JsonConvert.DeserializeObject<DialogPath>(jsonData);
+                    ConfigPath = JsonSerializer.Deserialize<DialogPath>(jsonData);
                 }
                 catch
                 {
@@ -67,7 +66,7 @@ namespace QQS_UI
 
         public void SaveConfig()
         {
-            File.WriteAllText(ConfigName, JsonConvert.SerializeObject(ConfigPath));
+            File.WriteAllText(ConfigName, JsonSerializer.Serialize(ConfigPath));
         }
     }
 }

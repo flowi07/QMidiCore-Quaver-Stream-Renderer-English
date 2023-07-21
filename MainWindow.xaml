@@ -8,7 +8,8 @@
         xmlns:ui="clr-namespace:QQS_UI.UI"
         mc:Ignorable="d"
         FontFamily="Segoe UI"
-        Title="QMidiCore Quaver Stream Renderer 1.5.1" Height="540" Width="960" Background="#FDFDFD">
+        Title="QMidiCore Quaver Stream Renderer 1.6.0" Height="540" Width="960" Background="#FDFDFD">
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,8 +27,14 @@
     <Grid Margin="10">
         <Grid IsEnabled="{DynamicResource notRendering}" Name="notRendering"/>
         <DockPanel>
-            <TabControl Style="{StaticResource SubTabs}" HorizontalAlignment="Left">
-                <TabItem Header="MIDI" Style="{StaticResource SubTabItems}">
+            <TabControl Style="{StaticResource SubTabs}" HorizontalAlignment="Left" SelectedIndex="0">
+                <TabItem Header="MIDI" Style="{StaticResource SubTabItems}" Foreground="Black" IsSelected="True">
+                    <TabItem.Background>
+                        <LinearGradientBrush EndPoint="0,1">
+                            <GradientStop Color="#FFF0F0F0"/>
+                            <GradientStop Color="White" Offset="1"/>
+                        </LinearGradientBrush>
+                    </TabItem.Background>
                     <Grid>
                         <Grid Name="midiLoaded" IsEnabled="{DynamicResource midiLoaded}"/>
                         <Grid Name="notRenderingOrPreviewing" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
@@ -40,9 +47,9 @@
                             </Grid.IsEnabled>
                         </Grid>
                         <StackPanel Margin="0">
-                            <Label Content="Midi" FontSize="20" Margin="0,15,0,0"/>
+                            <Label Content="MIDI" FontSize="20" Margin="0,15,0,0"/>
                             <DockPanel Margin="0,10,0,0">
-                                <Button Content="Open" HorizontalAlignment="Left" Width="100" IsEnabled="{Binding ElementName=loadable, Path=IsEnabled}" x:Name="openMidi" Click="openMidi_Click"/>
+                                <Button Content="MIDI" HorizontalAlignment="Left" Width="100" IsEnabled="{Binding ElementName=loadable, Path=IsEnabled}" x:Name="openMidi" Click="openMidi_Click"/>
                                 <TextBox Text="Input.mid" IsReadOnly="True" Width="550" HorizontalAlignment="Left" Margin="15,0,0,0" x:Name="midiPath"/>
                             </DockPanel>
                             <DockPanel Margin="0,10,0,0">
@@ -65,7 +72,7 @@
                                 <Label Content="-" Width="150" HorizontalAlignment="Left" x:Name="trackCount"/>
                             </DockPanel>
                             <DockPanel>
-                                <Label Content="Midi Length: " HorizontalAlignment="Left" Margin="0,0,0,0" Width="100"/>
+                                <Label Content="Duration: " HorizontalAlignment="Left" Margin="0,0,0,0" Width="100"/>
                                 <Label Content="--:--.---" HorizontalAlignment="Left" Width="150" x:Name="midiLen"/>
                             </DockPanel>
                             <DockPanel>
@@ -75,16 +82,16 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="General" Style="{StaticResource SubTabItems}">
+                <TabItem Header="Render" Style="{StaticResource SubTabItems}" Foreground="Black">
                     <Grid>
                         <StackPanel>
                             <Label Content="Render" Margin="0,15,0,0" FontSize="20"/>
                             <DockPanel Margin="0,10,0,0">
-                                <Label Content="Note speed: " HorizontalAlignment="Left" Width="150"/>
+                                <Label Content="Note Speed: " HorizontalAlignment="Left" Width="150"/>
                                 <ui:ValueSlider Minimum="0.25" Maximum="10" HorizontalAlignment="Left" Width="222" Value="1" TrueMin="0.25" TrueMax="10" Step="0.1" DecimalPoints="2" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="noteSpeed" ValueChanged="noteSpeed_ValueChanged"/>
                             </DockPanel>
                             <DockPanel Margin="0,0,0,0">
-                                <Label Content="Keyboard height (%): " HorizontalAlignment="Left" Width="150"/>
+                                <Label Content="Keys Height (%): " HorizontalAlignment="Left" Width="150"/>
                                 <ui:NumberSelect Minimum="5" Maximum="45" Value="15" x:Name="keyboardHeightPercentage" HorizontalAlignment="Left" Width="100" ValueChanged="keyboardHeightPercentage_ValueChanged">
                                     <ui:NumberSelect.IsEnabled>
                                         <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -118,7 +125,7 @@
                                 </ui:BetterCheckbox>
                             </DockPanel>
                             <DockPanel Margin="0,10,0,0">
-                                <Label Content="Split bar color (RGB):" Margin="0,0,0,0" Width="150" HorizontalAlignment="Left"/>
+                                <Label Content="Splitbar Color (RGB):" Margin="0,0,0,0" Width="150" HorizontalAlignment="Left"/>
                                 <Label Content="#"/>
                                 <TextBox Text="A00000" HorizontalAlignment="Left" Width="120" MaxLength="6" x:Name="barColor" IsReadOnly="{Binding ElementName=enableSeparator, Path=IsChecked, Converter={StaticResource NotValueConverter}}"/>
                                 <Border Background="Black" Width="30" Margin="10,0,0,0">
@@ -183,10 +190,10 @@
                             </ui:BetterCheckbox>
                         </DockPanel>
                         <DockPanel Margin="0,5,0,0">
-                            <ui:BetterCheckbox Text="Note border" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="enableNoteBorder" IsChecked="True" CheckToggled="enableNoteBorder_CheckToggled"/>
+                            <ui:BetterCheckbox Text="Note Border" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="enableNoteBorder" IsChecked="True" CheckToggled="enableNoteBorder_CheckToggled"/>
                         </DockPanel>
                         <DockPanel Margin="0,5,0,0">
-                            <ui:BetterCheckbox Text="Dense note effect" x:Name="denseNoteEffect" CheckToggled="denseNoteEffect_CheckToggled" IsChecked="True" HorizontalAlignment="Left">
+                            <ui:BetterCheckbox Text="Dense Notes" x:Name="denseNoteEffect" CheckToggled="denseNoteEffect_CheckToggled" IsChecked="True" HorizontalAlignment="Left">
                                 <ui:BetterCheckbox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
                                         <Binding Path="IsEnabled" ElementName="notRenderingOrPreviewing"/>
@@ -196,13 +203,13 @@
                             </ui:BetterCheckbox>
                         </DockPanel>
                         <DockPanel Margin="0,5,0,0">
-                            <ui:BetterCheckbox Text="Translucent notes" HorizontalAlignment="Left" Margin="0,0,0,0" x:Name="translucentNotes" CheckToggled="translucentNotes_CheckToggled" IsEnabled="{DynamicResource notRenderingOrPreviewing}" IsChecked="False"/>
+                            <ui:BetterCheckbox Text="Translucent Notes" HorizontalAlignment="Left" Margin="0,0,0,0" x:Name="translucentNotes" CheckToggled="translucentNotes_CheckToggled" IsEnabled="{DynamicResource notRenderingOrPreviewing}" IsChecked="False"/>
                         </DockPanel>
                         <DockPanel Margin="0,5,0,0">
-                            <ui:BetterCheckbox Text="Brighter pressed notes" HorizontalAlignment="Left" Width="220" x:Name="brighterPressedNotes" CheckToggled="brighterPressedNotes_CheckToggled" IsEnabled="{DynamicResource notRenderingOrPreviewing}" IsChecked="False"/>
+                            <ui:BetterCheckbox Text="Light Pressed Notes" HorizontalAlignment="Left" Width="220" x:Name="brighterPressedNotes" CheckToggled="brighterPressedNotes_CheckToggled" IsEnabled="{DynamicResource notRenderingOrPreviewing}" IsChecked="False"/>
                         </DockPanel>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Note border color depth" Width="160" HorizontalAlignment="Left"/>
+                            <Label Content="Color Note Border" Width="160" HorizontalAlignment="Left"/>
                             <ui:ValueSlider Minimum="1" Maximum="25" Width="220" Value="5" TrueMin="1" TrueMax="25" Step="2" DecimalPoints="2" x:Name="noteBorderShade" ValueChanged="noteBorderShade_ValueChanged">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -231,7 +238,7 @@
                                     </MultiBinding>
                                 </ui:ValueSlider.IsEnabled>
                             </ui:ValueSlider>
-                            <Label Content="Dense note color depth" Width="160" Margin="15,0,0,0" HorizontalAlignment="Left"/>
+                            <Label Content="Dense Notes Shade" Width="160" Margin="15,0,0,0" HorizontalAlignment="Left"/>
                             <ui:ValueSlider Minimum="1" Maximum="15" TrueMin="1" TrueMax="15" Step="0.1" DecimalPoints="2" x:Name="denseNoteShade" Value="5" ValueChanged="denseNoteShade_ValueChanged">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -254,11 +261,11 @@
                         </DockPanel>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="Gradient" Style="{StaticResource SubTabItems}" Visibility="{Binding ElementName=enableNoteColorGradient, Path=IsChecked}">
+                <TabItem Header="Fade" Style="{StaticResource SubTabItems}" Visibility="{Binding ElementName=enableNoteColorGradient, Path=IsChecked}" Foreground="Black">
                     <StackPanel Margin="0,15,0,0">
-                        <Label Content="Gradient settings" FontSize="20"/>
+                        <Label Content="Fade Set" FontSize="20"/>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Note fading intensity: " Width="180" HorizontalAlignment="Left"/>
+                            <Label Content="Note Fade Strength: " Width="180" HorizontalAlignment="Left"/>
                             <ui:ValueSlider Minimum="1" Width="250" Maximum="1.25" Value="1.08" x:Name="noteGradientStrength" Step="0.001" TrueMin="1" TrueMax="1.25" DecimalPoints="4" ValueChanged="noteGradientStrength_ValueChanged">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -267,7 +274,7 @@
                                     </MultiBinding>
                                 </ui:ValueSlider.IsEnabled>
                             </ui:ValueSlider>
-                            <Label Content="Split bar gradient intensity:" Width="180" Margin="10,0,0,0"/>
+                            <Label Content="Splitbar Fade Intensity:" Width="180" Margin="10,0,0,0"/>
                             <ui:ValueSlider Minimum="1" Width="250" Maximum="1.2" Value="1.08" x:Name="separatorGradientStrength" Step="0.001" DecimalPoints="4" TrueMin="1" TrueMax="1.2" ValueChanged="separatorGradientStrength_ValueChanged">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -279,7 +286,7 @@
                             </ui:ValueSlider>
                         </DockPanel>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Keyboard fade intensity (not pressed):" Width="180"/>
+                            <Label Content="Keys Fade Strength (not pressed):" Width="180"/>
                             <ui:ValueSlider Minimum="1" Width="250" Maximum="1.1" Value="1.0025" x:Name="unpressedKeyboardGradientStrength" Step="0.001" DecimalPoints="5" TrueMin="1" TrueMax="1.2" ValueChanged="unpressedKeyboardGradientStrength_ValueChanged">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -288,7 +295,7 @@
                                     </MultiBinding>
                                 </ui:ValueSlider.IsEnabled>
                             </ui:ValueSlider>
-                            <Label Content="Keyboard fade intensity (pressed):" Width="180" Margin="10,0,0,0"/>
+                            <Label Content="Keys Fade Strength (pressed)." Width="180" Margin="10,0,0,0"/>
                             <ui:ValueSlider Minimum="1" Width="250" Maximum="1.1" Value="1.002" x:Name="pressedKeyboardGradientStrength" Step="0.001" DecimalPoints="5" TrueMin="1" TrueMax="1.2" ValueChanged="pressedKeyboardGradientStrength_ValueChanged">
                                 <ui:ValueSlider.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -299,7 +306,7 @@
                             </ui:ValueSlider>
                         </DockPanel>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Note fade direction:" Width="180" HorizontalAlignment="Left"/>
+                            <Label Content="Note Fade Direction:" Width="180" HorizontalAlignment="Left"/>n
                             <ComboBox HorizontalAlignment="Left" Width="180" SelectedIndex="0" VerticalContentAlignment="Center" x:Name="noteGradientDirection" SelectionChanged="noteGradientDirection_SelectionChanged">
                                 <ComboBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -307,12 +314,12 @@
                                         <Binding Path="IsEnabled" ElementName="notRenderingOrPreviewing"/>
                                     </MultiBinding>
                                 </ComboBox.IsEnabled>
-                                <ComboBoxItem Content="left to right"/>
-                                <ComboBoxItem Content="right to left"/>
+                                <ComboBoxItem Content="Dimming from left to right"/>
+                                <ComboBoxItem Content="Dimming from right to left"/>
                             </ComboBox>
                         </DockPanel>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Keyboard fade direction:" Width="180" HorizontalAlignment="Left"/>
+                            <Label Content="Keys Fade Direction:" Width="180" HorizontalAlignment="Left"/>
                             <ComboBox HorizontalAlignment="Left" Width="180" SelectedIndex="0" VerticalContentAlignment="Center" x:Name="keyboardGradientDirection" SelectionChanged="keyboardGradientDirection_SelectionChanged">
                                 <ComboBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -320,12 +327,12 @@
                                         <Binding Path="IsEnabled" ElementName="notRenderingOrPreviewing"/>
                                     </MultiBinding>
                                 </ComboBox.IsEnabled>
-                                <ComboBoxItem Content="bottom to top"/>
-                                <ComboBoxItem Content="top to bottom"/>
+                                <ComboBoxItem Content="Dimming from left to right"/>
+                                <ComboBoxItem Content="Dimming from right to left"/>
                             </ComboBox>
                         </DockPanel>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Split bar gradient direction:" Width="180" HorizontalAlignment="Left"/>
+                            <Label Content="Splitbar Fade Direction:" Width="180" HorizontalAlignment="Left"/>
                             <ComboBox HorizontalAlignment="Left" Width="180" SelectedIndex="0" VerticalContentAlignment="Center" x:Name="barGradientDirection" SelectionChanged="barGradientDirection_SelectionChanged">
                                 <ComboBox.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -333,11 +340,11 @@
                                         <Binding Path="IsEnabled" ElementName="notRenderingOrPreviewing"/>
                                     </MultiBinding>
                                 </ComboBox.IsEnabled>
-                                <ComboBoxItem Content="bottom to top"/>
-                                <ComboBoxItem Content="top to bottom"/>
+                                <ComboBoxItem Content="Dimming from left to right"/>
+                                <ComboBoxItem Content="Dimming from right to left"/>
                             </ComboBox>
                         </DockPanel>
-                        <Button Content="Restore default values" Width="180" HorizontalAlignment="Left" Margin="0,10,0,0" x:Name="resetGradientScale" Click="resetGradientScale_Click">
+                        <Button Content="Restore Defaults" Width="180" HorizontalAlignment="Left" Margin="0,10,0,0" x:Name="resetGradientScale" Click="resetGradientScale_Click">
                             <Button.IsEnabled>
                                 <MultiBinding Converter="{StaticResource AndValueConverter}">
                                     <Binding Path="IsChecked" ElementName="enableNoteColorGradient"/>
@@ -347,34 +354,42 @@
                         </Button>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="Colors" Style="{StaticResource SubTabItems}">
+                <TabItem Header="Colors" Style="{StaticResource SubTabItems}" Foreground="Black">
                     <Grid>
                         <StackPanel Margin="0,15,0,0">
                             <Label Content="Colors" FontSize="20"/>
                             <DockPanel Margin="0,10,0,0">
-                                <Label Content="Current color file path:" Width="150" HorizontalAlignment="Left"/>
-                                <TextBox Text="Default color" HorizontalAlignment="Left" Width="450" x:Name="colorPath" IsReadOnly="True"/>
-                                <Button Content="选择" Width="120" HorizontalAlignment="Left" Margin="15,0,0,0" x:Name="openColorFile" Click="openColorFile_Click" IsEnabled="{DynamicResource notRendering}"/>
+                                <Label Content="Current colors file path (Json):" Width="200" HorizontalAlignment="Left"/>
+                                <TextBox Text="Default Colors" HorizontalAlignment="Left" Width="450" x:Name="colorPath" IsReadOnly="True"/>
+                                <Button Content="Open" Width="120" HorizontalAlignment="Left" Margin="15,0,0,0" x:Name="openColorFile" Click="openColorFile_Click" IsEnabled="{DynamicResource notRendering}"/>
                             </DockPanel>
-                            <Button Content="Load color file" HorizontalAlignment="Left" Width="130" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="loadColors" Click="loadColors_Click" Margin="0,10,0,0"/>
-                            <Button Content="Load PFA colors" HorizontalAlignment="Left" Width="130" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="loadPFAColors" Click="loadPFAColors_Click" Margin="0,10,0,0"/>
-                            <Button Content="Use default colors" HorizontalAlignment="Left" Width="130" Margin="0,10,0,0" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="useDefaultColors" Click="useDefaultColors_Click"/>
-                            <Button Content="Random color order" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="shuffleColor" Click="shuffleColor_Click" Width="130"/>
+                            <DockPanel Margin="0,10,0,0">
+                                <Label Content="Load Colors Bitmap Path (Bmp):" Width="200" HorizontalAlignment="Left"/>
+                                <TextBox Text="Default Colors" HorizontalAlignment="Left" Width="450" x:Name="colorBmpPath" IsReadOnly="True"/>
+                                <Button Content="Open" Width="120" HorizontalAlignment="Left" Margin="15,0,0,0" x:Name="openBmpColorFile" Click="openBmpColorFile_Click" IsEnabled="{DynamicResource notRendering}"/>
+                            </DockPanel>
+                            <DockPanel Margin="0,10,0,0">
+                                <Button Content="Load colors files (Json)" HorizontalAlignment="Left" Width="150" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="loadColors" Click="loadColors_Click" Margin="0,10,0,0"/>
+                                <Button Content="Load colors files (Bmp)" HorizontalAlignment="Left" Width="150" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="loadBmpColors" Click="loadBmpColors_Click" Margin="10,10,0,0"/>
+                            </DockPanel>
+                            <Button Content="Load PFA Colors" HorizontalAlignment="Left" Width="150" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="loadPFAColors" Click="loadPFAColors_Click" Margin="0,10,0,0"/>
+                            <Button Content="Using default colors" HorizontalAlignment="Left" Width="150" Margin="0,10,0,0" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="useDefaultColors" Click="useDefaultColors_Click"/>
+                            <Button Content="Random colors order" HorizontalAlignment="Left" Margin="0,10,0,0" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="shuffleColor" Click="shuffleColor_Click" Width="150"/>
                             <DockPanel Margin="0,15,0,0">
                             </DockPanel>
                         </StackPanel>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Advanced" Style="{StaticResource SubTabItems}">
+                <TabItem Header="Advanced" Style="{StaticResource SubTabItems}" Foreground="Black">
                     <StackPanel>
-                        <Label Content="Advanced Settings" FontSize="20" Margin="0,15,0,0"/>
+                        <Label Content="Advanced" FontSize="20" Margin="0,15,0,0"/>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="MIDI maximum concurrent count:" Width="150" HorizontalAlignment="Left"/>
+                            <Label Content="MIDI Maximum Concurrency:" Width="150" HorizontalAlignment="Left"/>
                             <ui:NumberSelect Minimum="1" Maximum="256" HorizontalAlignment="Left" Width="100" x:Name="maxMidiLoaderConcurrency" ValueChanged="maxMidiLoaderConcurrency_ValueChanged" IsEnabled="{Binding ElementName=useDefaultMidiLoaderConcurrency, Path=IsChecked, Converter={StaticResource NotValueConverter}}"/>
                             <ui:BetterCheckbox Text="Use default values" Margin="5,0,0,0" x:Name="useDefaultMidiLoaderConcurrency" IsChecked="True" CheckToggled="useDefaultMidiLoaderConcurrency_CheckToggled" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
                         </DockPanel>
                         <DockPanel Margin="0,10,0,0">
-                            <Label Content="Maximum number of concurrent rendering:" Width="150" HorizontalAlignment="Left"/>
+                            <Label Content="Render Maximum Concurrency:" Width="150" HorizontalAlignment="Left"/>
                             <ui:NumberSelect Minimum="1" Maximum="256" HorizontalAlignment="Left" Width="100" x:Name="maxRenderConcurrency" ValueChanged="maxRenderConcurrency_ValueChanged">
                                 <ui:NumberSelect.IsEnabled>
                                     <MultiBinding Converter="{StaticResource AndValueConverter}">
@@ -385,13 +400,13 @@
                             </ui:NumberSelect>
                             <ui:BetterCheckbox Text="Use default values" Margin="5,0,0,0" x:Name="useDefaultRenderConcurrency" IsChecked="True" CheckToggled="useDefaultRenderConcurrency_CheckToggled" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
                         </DockPanel>
-                        <Button VerticalAlignment="Bottom" Margin="0,10,0,0" Padding="5" Content="GC" x:Name="forceGC" Click="forceGC_Click"/>
+                        <Button VerticalAlignment="Bottom" Margin="0,10,0,0" Padding="5" Content="GC Collect" x:Name="forceGC" Click="forceGC_Click"/>
                     </StackPanel>
                 </TabItem>
-                <TabItem Header="Render" Style="{StaticResource SubTabItems}">
+                <TabItem Header="Export" Style="{StaticResource SubTabItems}" Foreground="Black">
                     <Grid>
                         <StackPanel>
-                            <Label Content="Output" Margin="0,15,0,0" FontSize="20"/>
+                            <Label Content="Export" Margin="0,15,0,0" FontSize="20"/>
                             <DockPanel Margin="0,10,0,0">
                                 <ui:BetterRadio Text="CRF" Width="150" ParentDepth="3" x:Name="crfOptions" IsChecked="True" IsEnabled="{DynamicResource notRenderingOrPreviewing}" RadioChecked="videoQualityOptions_RadioChanged"/>
                                 <ui:NumberSelect Minimum="0" Maximum="51" Step="1" Value="17" Width="100" HorizontalAlignment="Left" x:Name="crfSelect" ValueChanged="crfSelect_ValueChanged">
@@ -419,16 +434,16 @@
                                 <ui:NumberSelect Minimum="15" Maximum="480" Value="60" x:Name="fps" HorizontalAlignment="Left" Width="100" ValueChanged="fps_ValueChanged" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
                             </DockPanel>
                             <DockPanel Margin="0,5,0,0">
-                                <Label Content="Delayed start (sec):" HorizontalAlignment="Left" Width="150"/>
+                                <Label Content="Delay start (sec):" HorizontalAlignment="Left" Width="150"/>
                                 <ui:NumberSelect Minimum="0" Maximum="10" Value="0" x:Name="delayStart" HorizontalAlignment="Left" Width="100" ValueChanged="delayStart_ValueChanged" IsEnabled="{DynamicResource notRenderingOrPreviewing}" Step="0.1" DecimalPoints="1"/>
                             </DockPanel>
                             <DockPanel Margin="0,5,0,0">
-                                <Label Content="Rendering resolution: " HorizontalAlignment="Left" Width="150"/>
+                                <Label Content="Resolution: " HorizontalAlignment="Left" Width="150"/>
                                 <Label Content="Width"/>
                                 <ui:NumberSelect x:Name="renderWidth" Value="1920" Minimum="480" Maximum="7680" Width="100" HorizontalAlignment="Left" ValueChanged="renderWidth_ValueChanged" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
                                 <Label Content="Height" Margin="5,0,0,0"/>
                                 <ui:NumberSelect x:Name="renderHeight" Value="1080" Minimum="360" Maximum="4320" Width="100" HorizontalAlignment="Left" ValueChanged="renderHeight_ValueChanged" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
-                                <Label Content="Use preset values: " Margin="15,0,0,0"/>
+                                <Label Content="Presets: " Margin="15,0,0,0"/>
                                 <ComboBox x:Name="presetResolution" IsEditable="False" SelectedIndex="2" VerticalContentAlignment="Center" SelectionChanged="presetResolution_SelectionChanged" IsEnabled="{DynamicResource notRenderingOrPreviewing}">
                                     <ComboBoxItem Content="480p (640x480, 4:3)"/>
                                     <ComboBoxItem Content="720p (1280x720, 16:9)"/>
@@ -443,9 +458,9 @@
                                 <Button Content="Select" Width="120" HorizontalAlignment="Left" Margin="15,0,0,0" IsEnabled="{DynamicResource notRenderingOrPreviewing}" x:Name="selectOutput" Click="selectOutput_Click"/>
                             </DockPanel>
                             <DockPanel Margin="0,10,0,0">
-                                <Label Content="FFMpeg Additional parameters:" Width="150"/>
+                                <Label Content="FFMpeg Flags:" Width="150"/>
                                 <TextBox Text="" Width="420" x:Name="additionalFFArgs" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
-                                <ui:BetterCheckbox Text="Transparent video background" IsChecked="False" Margin="5,0,0,0" x:Name="enableTranparentBackground" CheckToggled="enableTranparentBackground_CheckToggled" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
+                                <ui:BetterCheckbox Text="Transparent Video Background" IsChecked="False" Margin="5,0,0,0" x:Name="enableTranparentBackground" CheckToggled="enableTranparentBackground_CheckToggled" IsEnabled="{DynamicResource notRenderingOrPreviewing}"/>
                             </DockPanel>
                         </StackPanel>
                     </Grid>
@@ -470,11 +485,11 @@
                         </MultiBinding>
                     </Button.IsEnabled>
                 </Button>
-                <ui:BetterCheckbox x:Name="limitPreviewFPS" Text="Limit Preview FPS" Margin="5,20,0,0" IsChecked="True" HorizontalAlignment="Left" CheckToggled="limitPreviewFPS_CheckToggled" IsEnabled="{DynamicResource notRendering}"/>
+                <ui:BetterCheckbox x:Name="limitPreviewFPS" Text="Limit FPS" Margin="5,20,0,0" IsChecked="True" HorizontalAlignment="Left" CheckToggled="limitPreviewFPS_CheckToggled" IsEnabled="{DynamicResource notRendering}"/>
             </DockPanel>
             <DockPanel Margin="0,10,0,0" VerticalAlignment="Bottom">
-                <Button Content="Stop" Width="270" Margin="0,0,0,0" IsEnabled="{Binding ElementName=notRenderingOrPreviewing, Path=IsEnabled, Converter={StaticResource NotValueConverter}}" x:Name="interruptButton" Click="interruptButton_Click" HorizontalAlignment="Left"/>
-                <ui:BetterCheckbox Text="Pause Preview" Width="270" Margin="5" IsEnabled="{Binding ElementName=notRendering, Path=IsEnabled}" x:Name="pause" CheckToggled="pause_CheckToggled"/>
+                <Button Content="Cancel" Width="270" Margin="0,0,0,0" IsEnabled="{Binding ElementName=notRenderingOrPreviewing, Path=IsEnabled, Converter={StaticResource NotValueConverter}}" x:Name="interruptButton" Click="interruptButton_Click" HorizontalAlignment="Left"/>
+                <ui:BetterCheckbox Text="Pause" Width="270" Margin="5" IsEnabled="{Binding ElementName=notRendering, Path=IsEnabled}" x:Name="pause" CheckToggled="pause_CheckToggled"/>
             </DockPanel>
         </StackPanel>
     </Grid>
