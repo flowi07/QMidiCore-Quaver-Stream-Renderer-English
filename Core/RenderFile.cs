@@ -120,7 +120,7 @@ namespace QQS_UI.Core
                 };
                 trkInfo[i].Data = (byte*)UnsafeMemory.Allocate(trkInfo[i].Size);
                 _ = stream.Read(trkInfo[i].Data, trkInfo[i].Size, 1);
-                Console.WriteLine("拷贝音轨 #{0} 的信息. 音轨大小: {1} 字节.", i, trkInfo[i].Size);
+                Console.WriteLine("Copy the information of track #{0}. Track size: {1} bytes.", i, trkInfo[i].Size);
             }
             stream.Dispose();
             for (int i = 0; i != 128; ++i)
@@ -266,7 +266,7 @@ namespace QQS_UI.Core
                             break;
                     }
                 }
-                Console.WriteLine("音轨 #{0} 解析完成. 音符数: {1}.", i, nl.Count);
+                Console.WriteLine("Track #{0} Parsing complete. Number of notes: {1}.", i, nl.Count);
                 UnsafeMemory.Free(trkInfo[i].Data);
                 trkInfo[i].Data = null;
                 trkInfo[i].TrackTime = trkTime;
@@ -280,7 +280,7 @@ namespace QQS_UI.Core
                 NoteCount += trkInfo[i].Notes.Count;
             }
             Tempos.TrimExcess();
-            Console.WriteLine("正在处理 Midi 事件...");
+            Console.WriteLine("Processing MIDI events...");
             for (int i = 0; i != TrackCount; ++i)
             {
                 if (trkInfo[i].Notes.Count == 0)
@@ -318,8 +318,8 @@ namespace QQS_UI.Core
             Tempos.AddRange(arr);
             arr.Dispose();
 
-            Console.WriteLine("Midi 事件处理完成. 音符总数: {0}.", NoteCount);
-            Console.WriteLine("正在对 Midi 文件进行 OR 处理.");
+            Console.WriteLine("MIDI event processing complete. Total notes: {0}.", NoteCount);
+            Console.WriteLine("OR processing...");
             _ = Parallel.For(0, 128, opt, [MethodImpl(MethodImplOptions.AggressiveOptimization)] (i) =>
             {
                 UnmanagedList<Note> nl = Notes[i];
@@ -342,7 +342,7 @@ namespace QQS_UI.Core
                     }
                 }
             });
-            Console.WriteLine("OR 处理完成.");
+            Console.WriteLine("OR Processing completed.");
         }
         public RenderFile(string path)
         {
@@ -354,7 +354,7 @@ namespace QQS_UI.Core
             Stopwatch sw = Stopwatch.StartNew();
             Parse();
             sw.Stop();
-            Console.WriteLine("加载 Midi 用时: {0:F2} s.", sw.ElapsedMilliseconds / 1000.0);
+            Console.WriteLine("Loading Midi took: {0:F2} s.", sw.ElapsedMilliseconds / 1000.0);
         }
 
         public string MidiPath { get; }

@@ -46,12 +46,12 @@ namespace QQS_UI.Core
             0xFFFF3333, 0xFF33FFB1, 0xFFFF33CC, 0xFF4EFF33, 0xFF9933FF, 0xFFE7FF33
         };
         /// <summary>
-        /// 渲染器对象实际使用的键盘颜色.<br/>
+        /// Render器对象实际使用的键盘颜色.<br/>
         /// Key colors that renderer actually uses.
         /// </summary>
         public static RGBAColor[] KeyColors;
         /// <summary>
-        /// 渲染器对象实际使用的音符颜色.<br/>
+        /// Render器对象实际使用的音符颜色.<br/>
         /// Note colors that renderer actually uses.
         /// </summary>
         public static RGBAColor[] NoteColors;
@@ -110,7 +110,7 @@ namespace QQS_UI.Core
         }
 
         /// <summary>
-        /// 表示预览时渲染FPS是否被控制不高于目标FPS.<br/>
+        /// 表示预览时RenderFPS是否被控制不高于目标FPS.<br/>
         /// Determines whether render FPS cannot be greater than target FPS.
         /// </summary>
         public static bool LimitPreviewFPS = true;

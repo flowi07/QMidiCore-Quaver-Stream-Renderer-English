@@ -340,11 +340,11 @@ namespace QQS_UI.Core
             {
                 j = Global.DrawMap[i];
                 FillRectangle(keyx[j], 0, keyw[j], keyh, KeyColors[j]);
-                DrawRectangle(keyx[j], 0, keyw[j] + 1, keyh, 0xFF000000); // 绘制琴键之间的分隔线. Draws a seperator between two keys.
+                DrawRectangle(keyx[j], 0, keyw[j] + 1, keyh, 0xFF000000); // Draw Keys之间的分隔线. Draws a seperator between two keys.
                 if (whiteKeyShade && !KeyPressed[j]) // 如果当前琴键未被按下
                 {
                     DrawRectangle(keyx[j], 0, keyw[j] + 1, bgr, 0xFF000000);
-                    FillRectangle(keyx[j] + 1, 1, keyw[j] - 1, bgr - 2, 0xFF999999); // 绘制琴键底部阴影. 感谢 Tweak 对阴影进行改善.
+                    FillRectangle(keyx[j] + 1, 1, keyw[j] - 1, bgr - 2, 0xFF999999); // Draw Keys底部阴影. 感谢 Tweak 对阴影进行改善.
                 }
 
             }
@@ -555,7 +555,7 @@ namespace QQS_UI.Core
             }
             else
             {
-                if (Global.EnableDenseNoteEffect) // 不必要做变白的处理, 因为效果并不明显
+                if (Global.EnableDenseNoteEffect) // 不必要做变白的处理, 因为Effects并不明显
                 {
                     FillRectangle(notex[key], y, notew[key], height, DenseNoteColors[colorIndex]);
                 }

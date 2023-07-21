@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace QQS_UI.Core
 {
     /// <summary>
-    /// 表示渲染的设置. 请使用 <see cref="CreateRenderOptions"/> 来创建一个 <see cref="RenderOptions"/> 结构.
+    /// 表示Render的Set. 请使用 <see cref="CreateRenderOptions"/> 来创建一个 <see cref="RenderOptions"/> 结构.
     /// </summary>
     public struct RenderOptions
     {

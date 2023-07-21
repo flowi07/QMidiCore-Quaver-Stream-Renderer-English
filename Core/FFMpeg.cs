@@ -19,20 +19,20 @@ namespace QQS_UI.Core
         /// 初始化一个新的 <see cref="FFMpeg"/> 实例.
         /// </summary>
         /// <param name="ffargs">初始化ffmpeg的参数.</param>
-        /// <param name="width">输入视频的宽.</param>
-        /// <param name="height">输入视频的高.</param>
+        /// <param name="width">输入Video的宽.</param>
+        /// <param name="height">输入Video的高.</param>
         public FFMpeg(string ffargs, int width, int height)
         {
             string ffcommand;
             stream = CStream.OpenPipe(ffcommand = "ffmpeg " + ffargs, "wb");
             frameSize = (uint)width * (uint)height * 4;
-            Console.WriteLine("FFMpeg 启动命令: {0}", ffcommand);
+            Console.WriteLine("FFMpeg start command: {0}", ffcommand);
         }
         /// <summary>
         /// 向 FFMpeg 写入一帧.<br/>
         /// Write a frame to FFMpeg.
         /// </summary>
-        /// <param name="buffer">存有视频画面的缓冲区.</param>
+        /// <param name="buffer">存有Video画面的缓冲区.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteFrame(in void* buffer)
         {

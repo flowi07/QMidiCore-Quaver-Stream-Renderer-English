@@ -14,7 +14,7 @@ namespace QQS_UI
         public string ColorDirectory;
     }
     /// <summary>
-    /// 表示用于存储Midi文件夹路径和视频文件夹路径.
+    /// 表示用于存储Midi文件夹路径和Video文件夹路径.
     /// </summary>
     public class Config
     {
